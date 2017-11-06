@@ -6,21 +6,20 @@ const User = require("../data_access/mongo_schemas/userSchema")
 router.get("/", (req, res, next) => {
     User.find({})
         .then((users) => {
-            if (users.length <= 0) {
-                insertUser(res)
-
-                return
-            }
             res.send(users)
         })
 })
 
-function insertUser(res) {
-    const user = new User({name: "test user"})
+router.post("/", (req, res) => {
+    const user = new User({name: req.body.name, email: req.body.email, password: req.body.password})
     user.save()
         .then(() => {
-            res.send([user])
+            res.send(user)
         })
-}
+        .catch((err) => {
+            res.send(err)
+        })
+})
+
 
 module.exports = router
