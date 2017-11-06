@@ -9,10 +9,14 @@
     "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
+    "mongoose": "^4.11.13",
     "ejs": "~2.5.5",
     "express": "~4.14.1",
     "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.2"
+    "serve-favicon": "~2.3.2",
+    "oauth2orize": "^1.5.0",
+    "passport": "^0.3.2",
+    "passport-http-bearer": "^1.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

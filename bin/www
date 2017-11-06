@@ -8,7 +8,8 @@ const app = require("../app")
 const debug = require("debug")("d3-backend:server")
 const https = require("https")
 const fs = require("fs")
-
+const mongoose = require("mongoose")
+mongoose.Promise = global.Promise
 
 /**
  * Get port from environment and store in Express.
@@ -30,6 +31,12 @@ const options = {
 // console.log(options.key)
 // console.log(options.cert)
 const server = https.createServer(options, app)
+
+//connect to local mongo db
+mongoose.connect("mongodb://localhost:27017/d3_dev")
+mongoose.connection.once("open", () => {
+    console.log("db connected")
+})
 
 /**
  * Listen on provided port, on all network interfaces.
