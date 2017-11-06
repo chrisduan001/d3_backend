@@ -33,6 +33,13 @@ UserSchema.pre("save", function(next) {
     })
 })
 
+UserSchema.methods.verifyPassword = function(password, callback) {
+    bcrypt.compare(password, this.password)
+        .then((result) => {
+            callback(result)
+        })
+}
+
 const User = mongoose.model("user", UserSchema)
 
 module.exports = User
