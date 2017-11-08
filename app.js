@@ -4,10 +4,11 @@ const favicon = require("serve-favicon")
 const logger = require("morgan")
 const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser")
+const passport = require("passport")
 
 const index = require("./routes/index")
 const users = require("./routes/users")
-const token = require("./auth/token")
+const token = require("./routes/token")
 
 const app = express()
 
@@ -19,17 +20,26 @@ app.set("view engine", "ejs")
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")))
 app.use(logger("dev"))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "public")))
 
-app.use("/", index)
-app.use("/users", users)
-app.use("/token", token)
+// app.use("/", index)
+app.use(passport.initialize())
+const router = express.Router()
+
+router.route("/users")
+    .post(token.isBearerAuthenticated, users.postUser)
+    .get(token.isBearerAuthenticated, users.getUser)
+
+router.route("/token")
+    .post(token.getToken)
+
+app.use("/api", router)
 
 //catch 404 and forward to error handler
 app.use((req, res, next) => {
-    const err = new Error("Not Found")
+    const err = new Error("Invalid api")
     err.status = 404
     next(err)
 })
