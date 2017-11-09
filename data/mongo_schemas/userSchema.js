@@ -15,7 +15,8 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: [true, "email can't be null"],
-        unique: [true, "email exists"]
+        unique: [true, "email exists"],
+        index: true
     }
 })
 

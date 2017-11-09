@@ -1,5 +1,5 @@
 const express = require("express")
-const User = require("../data_access/mongo_schemas/userSchema")
+const User = require("./mongo_schemas/userSchema")
 
 /* GET users listing. */
 exports.getUser = (req, res) => {

@@ -4,7 +4,6 @@ const favicon = require("serve-favicon")
 const logger = require("morgan")
 const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser")
-const passport = require("passport")
 
 const index = require("./routes/index")
 const users = require("./routes/users")
@@ -25,12 +24,12 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "public")))
 
 // app.use("/", index)
-app.use(passport.initialize())
+
 const router = express.Router()
 
 router.route("/users")
-    .post(token.isBearerAuthenticated, users.postUser)
     .get(token.isBearerAuthenticated, users.getUser)
+    .post(token.isBearerAuthenticated, users.postUser)
 
 router.route("/token")
     .post(token.getToken)

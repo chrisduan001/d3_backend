@@ -1,7 +1,7 @@
 /**
  * Created by on 11/5/17.
  */
-const User = require("../../data_access/mongo_schemas/userSchema")
+const User = require(".././mongo_schemas/userSchema")
 const server = require("../../app")
 const chai = require("chai")
 const chaiHttp = require("chai-http")
