@@ -1,13 +1,14 @@
 /**
  * Created by on 11/4/17.
  */
-
 const passport = require("passport")
 const BearerStrategy = require("passport-http-bearer").Strategy
 const authorization = require("../logic/authorization")
 
 exports.getToken = (req, res) => {
-    res.send(authorization.authorizeUser(req.body))
+    authorization.authorizeUser(req.body, (response) => {
+        res.send(response)
+    })
 }
 
 passport.use(new BearerStrategy((accessToken, callback) => {

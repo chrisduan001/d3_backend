@@ -39,6 +39,9 @@ UserSchema.methods.verifyPassword = function(password, callback) {
         .then((result) => {
             callback(result)
         })
+        .catch(() => {
+            callback(false)
+        })
 }
 
 const User = mongoose.model("user", UserSchema)

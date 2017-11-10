@@ -1,7 +1,7 @@
 /**
  * Created by on 11/8/17.
  */
-export const errorCode = {
+exports.errorCode = {
     noError: {
         errorCode: 0
     },

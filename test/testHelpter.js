@@ -2,7 +2,7 @@
  * Created by on 11/5/17.
  */
 const mongoose = require("mongoose")
-const User = require("./mongo_schemas/userSchema")
+const User = require("../data/mongo_schemas/userSchema")
 
 before((done) => {
     mongoose.connect("mongodb://localhost:27017/d3_test")
@@ -16,8 +16,7 @@ before((done) => {
     })
 })
 
-//clear db
-beforeEach((done) => {
+after((done) => {
     const { users } = mongoose.connection.collections
     if (!users) {
         done()
