@@ -2,29 +2,27 @@
  * Created by on 11/8/17.
  */
 const User = require("../data/mongo_schemas/userSchema")
-const errorCode = require("../data/entity/errorCode").errorCode
-const errorMessage = require("../data/entity/errorMessage").errorMessage
-const commonModel = require("./commonModel")
+const errorEntity = require("../data/entity/errorEntity").errorEntity
 
 exports.authorizeUser = ({email, password}, callback) => {
     User.findOne({email: email})
         .then((user) => {
             if (!user) {
-                callback(commonModel.errorModel(errorCode.userAuthError, errorMessage.userAuthError))
+                callback(errorEntity.userAuthError)
 
                 return
             }
             user.verifyPassword(password, (result) => {
                 if (result) {
-                    callback(result)
+                    callback({token: "tokenxyzdzz"})
 
                     return
                 }
 
-                callback(commonModel.errorModel(errorCode.userAuthError, errorMessage.userAuthError))
+                callback(errorEntity.userAuthError)
             })
         })
         .catch(() => {
-            callback(Object.assign(errorCode.serverError, errorCode.serverError))
+            callback(errorEntity.serverError)
         })
 }

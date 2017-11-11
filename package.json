@@ -27,6 +27,7 @@
     "chai-http": "^3.0.0",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^7.4.0",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "rewire": "^3.0.0"
   }
 }
