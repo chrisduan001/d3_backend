@@ -7,7 +7,8 @@ const bcrypt = require("bcrypt")
 
 const UserSchema = new Schema({
     name: String,
-    token: String,
+    token: [{type: Schema.Types.ObjectId, ref: "token"}],
+    refreshToken: String,
     password: {
         type: String,
         required: [true, "An error has occurred, check your password"]
@@ -22,27 +23,21 @@ const UserSchema = new Schema({
 
 //note: can't use the fat error function here, won't be able to get value
 UserSchema.pre("save", function(next) {
-    const user = this
-    bcrypt.hash(user.password, 10, (err, hash) => {
-        if (err) {
-            next(err)
+    if (this.isNew) {
+        const user = this
+        bcrypt.hash(user.password, 10, (err, hash) => {
+            if (err) {
+                next(err)
 
-            return
-        }
-        this.password = hash
+                return
+            }
+            this.password = hash
+            next()
+        })
+    } else {
         next()
-    })
+    }
 })
-
-UserSchema.methods.verifyPassword = function(password, callback) {
-    bcrypt.compare(password, this.password)
-        .then((result) => {
-            callback(result)
-        })
-        .catch(() => {
-            callback(false)
-        })
-}
 
 const User = mongoose.model("user", UserSchema)
 
