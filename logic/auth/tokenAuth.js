@@ -26,7 +26,7 @@ exports.authorizeUser = ({email, password}, callback) => {
                     TokenDao.saveToken(user,
                         oauthToken,
                         refreshToken,
-                        (err) => {
+                        (updatedUser, err) => {
                             if (err) {
                                 callback(errorEntity.serverError)
 
@@ -35,8 +35,8 @@ exports.authorizeUser = ({email, password}, callback) => {
 
                             callback({
                                 //token format is userid + % + token, it will be used to find token by user id
-                                token: user.id + "%" + oauthToken,
-                                refreshToken: user.refreshToken,
+                                token: updatedUser.id + "%" + oauthToken,
+                                refreshToken: updatedUser.refreshToken,
                                 "expire": valueConstants.TOKEN_EXPIRE_SECONDS
                             })
                         })

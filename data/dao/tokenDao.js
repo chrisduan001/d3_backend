@@ -5,7 +5,7 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const TokenSchema = new Schema({
-    token: {
+    value: {
         type: String,
         required: true
     }
@@ -20,12 +20,12 @@ exports.saveToken = (userInDb, tokenData, refreshToken, callback) => {
         userInDb.set("refreshToken", refreshToken)
     }
 
-    const tokenSchema = new Token({tokenData})
+    const tokenSchema = new Token({value: tokenData})
     userInDb.token.push(tokenSchema)
 
     userInDb.save()
-        .then(() => callback(null))
-        .catch(() => callback(new Error()))
+        .then(() => callback(userInDb, null))
+        .catch(() => callback(null, new Error()))
 }
 
 exports.removeTokenById = (id) => {
@@ -33,5 +33,3 @@ exports.removeTokenById = (id) => {
         .then(() => {})
         .catch(() => {})
 }
-
-module.exports = Token
