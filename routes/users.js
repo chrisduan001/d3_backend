@@ -1,24 +1,14 @@
-const express = require("express")
-const User = require("../data/mongo_schemas/userSchema")
+const userActions = require("../logic/user/userActions")
 
 /* GET users listing. */
-exports.getUser = (req, res) => {
-    User.find({})
-        .then((users) => {
-            res.send(users)
-        })
-        .catch((err) => {
-            res.send(err)
-        })
-}
+// exports.getUser = (req, res) => {
+//     userActions.findUserById(req.body, (response) => {
+//         res.send(response)
+//     })
+// }
 
 exports.postUser = (req, res) => {
-    const user = new User({name: req.body.name, email: req.body.email, password: req.body.password})
-    user.save()
-        .then(() => {
-            res.send(user)
-        })
-        .catch((err) => {
-            res.send(err)
-        })
+    userActions.saveNewUser(req.body, (response) => {
+        res.send(response)
+    })
 }

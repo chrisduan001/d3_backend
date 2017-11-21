@@ -18,6 +18,7 @@ describe("Authorization", () => {
             .post("/api/token")
             .send(postData)
             .end((err, res) => {
+                console.log(res.body)
                 res.should.have.status(200)
                 res.body.token.should.to.be.a("string")
                 assert(res.body.error === undefined)

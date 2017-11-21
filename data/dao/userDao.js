@@ -41,4 +41,39 @@ UserSchema.pre("save", function(next) {
 
 const User = mongoose.model("user", UserSchema)
 
-module.exports = User
+//=============data access==============
+
+exports.getUserById = (id, path, callback) => {
+    User.findOne({_id: id})
+        .populate(path)
+        .then((user) => {
+            callback(user, null)
+        })
+        .catch((err) => {
+            console.log(err.message)
+            callback(null, new Error())
+        })
+}
+
+exports.getUserByEmail = (email, callback) => {
+    User.findOne({email})
+        .then((user) => {
+            callback(user, null)
+        })
+        .catch((err) => {
+            console.log(err.message)
+            callback(null, new Error())
+        })
+}
+
+exports.saveNewUser = (newUser, callback) => {
+    const user = new User({name: newUser.name, email: newUser.email, password: newUser.password})
+
+    user.save()
+        .then(() => {
+            callback(user, null)
+        })
+        .catch(() => {
+            callback(null, new Error())
+        })
+}

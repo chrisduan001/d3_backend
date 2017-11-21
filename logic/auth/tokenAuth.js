@@ -1,55 +1,55 @@
 /**
  * Created by on 11/8/17.
  */
-const User = require("../../data/mongo_schemas/userSchema")
-const Token = require("../../data/mongo_schemas/tokenSchema")
+const UserDao = require("../../data/dao/userDao")
+const TokenDao = require("../../data/dao/tokenDao")
 const errorEntity = require("../../data/entity/errorEntity").errorEntity
-const passport = require("passport")
-const BearerStrategy = require("passport-http-bearer").Strategy
 const valueConstants = require("../../constants/valueConstants")
 const bcrypt = require("bcrypt")
+const _ = require("lodash")
 
 exports.authorizeUser = ({email, password}, callback) => {
-    User.findOne({email: email})
-        .then((user) => {
-            if (!user) {
-                callback(errorEntity.userAuthError)
+    UserDao.getUserByEmail(email, (user, error) => {
+        if (error) {
+            callback(errorEntity.userAuthError)
 
-                return
-            }
+            return
+        }
 
-            bcrypt.compare(password, user.password)
-                .then((result) => {
-                    if (result) {
-                        //save token
-                        //% separates the uid from the token
-                        const token = user._id + "%" + uid(150)
-                        const tokenSchema = new Token({token})
+        bcrypt.compare(password, user.password)
+            .then((result) => {
+                if (result) {
+                    const oauthToken = uid(150)
+                    const refreshToken = user.refreshToken ? null : uid(150)
+                    //save token
+                    //generate refresh token if it is not exist
+                    TokenDao.saveToken(user,
+                        oauthToken,
+                        refreshToken,
+                        (err) => {
+                            if (err) {
+                                callback(errorEntity.serverError)
 
-                        if (!user.refreshToken) {
-                            user.set("refreshToken", uid(150))
-                        }
-                        user.token.push(tokenSchema)
+                                return
+                            }
 
-                        user.save()
-                            .then(callback({
-                                token: tokenSchema.token,
+                            callback({
+                                //token format is userid + % + token, it will be used to find token by user id
+                                token: user.id + "%" + oauthToken,
+                                refreshToken: user.refreshToken,
                                 "expire": valueConstants.TOKEN_EXPIRE_SECONDS
-                            }))
-                            .catch(() => callback(errorEntity.serverError))
-                    } else {
-                        callback(errorEntity.userAuthError)
-                    }
-                })
-        })
-        .catch(() => {
-            callback(errorEntity.serverError)
-        })
+                            })
+                        })
+                } else {
+                    callback(errorEntity.userAuthError)
+                }
+            })
+    })
 }
 
 const uid = (len) => {
     const buf = []
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$^&*-="
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~+/="
     const charlen = chars.length
 
     for (let i = 0; i < len; ++i) {
@@ -63,11 +63,43 @@ const getRandomInt = (max, min) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-passport.use(new BearerStrategy((accessToken, callback) => {
-    if (accessToken === "xyzzzzztoken") {
-        callback(null, {name: "aname", data: "adata"}, { scope: "*" })
+exports.validateToken = (token, next, callback) => {
+    if (token) {
+        //token format: Authorization tokendata
+        try {
+            const tokenData = token.split(" ")[1]
+            const userId = tokenData.split("%")[0]
+
+            UserDao.getUserById(userId, {path: "token"}, (user, error) => {
+                if (error) {
+                    callback(false, errorEntity.invalidTokenError)
+
+                    return
+                }
+
+                if (_.filter(user.token, {tokenData})) {
+                    if (isTokenExpired(token)) {
+                        TokenDao.removeTokenById(token.id)
+
+                        callback(true, errorEntity.expiredTokenError)
+                    } else {
+                        callback(true, null)
+                    }
+                }
+            })
+        } catch (err) {
+            callback(false, errorEntity.invalidTokenError)
+        }
     } else {
-        callback(null, false)
+        callback(false, errorEntity.invalidTokenError)
     }
-}))
+}
+
+//visible for testing
+const isTokenExpired = (token) => {
+    const tokenDate = new Date(parseInt(token.id.substring(0, 8), 16))
+    const currentDate = new Date()
+
+    return tokenDate.getSeconds() + valueConstants.TOKEN_EXPIRE_SECONDS < currentDate.getSeconds()
+}
 

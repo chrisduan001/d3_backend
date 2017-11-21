@@ -28,7 +28,6 @@ app.use(express.static(path.join(__dirname, "public")))
 const router = express.Router()
 
 router.route("/users")
-    .get(token.isBearerAuthenticated, users.getUser)
     .post(token.isBearerAuthenticated, users.postUser)
 
 router.route("/token")
