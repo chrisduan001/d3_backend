@@ -27,9 +27,3 @@ exports.saveToken = (userInDb, tokenData, refreshToken, callback) => {
         .then(() => callback(userInDb, null))
         .catch(() => callback(null, new Error()))
 }
-
-exports.removeTokenById = (id) => {
-    Token.remove({_id: id})
-        .then(() => {})
-        .catch(() => {})
-}

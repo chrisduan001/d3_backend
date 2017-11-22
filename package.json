@@ -27,6 +27,7 @@
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^7.4.0",
     "mocha": "^4.0.1",
-    "rewire": "^3.0.0"
+    "rewire": "^3.0.0",
+    "sinon": "^4.1.2"
   }
 }

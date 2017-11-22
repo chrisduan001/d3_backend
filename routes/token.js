@@ -11,7 +11,7 @@ exports.getToken = (req, res) => {
 }
 
 exports.isBearerAuthenticated = (req, res, next) => {
-    tokenAuth.validateToken(req.headers.authorization, next, (isValid, info) => {
+    tokenAuth.validateToken(req.headers.authorization, (isValid, info) => {
         if (isValid) {
             next()
         } else {

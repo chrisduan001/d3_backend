@@ -6,7 +6,7 @@ const tokenDao = require("../../data/dao/tokenDao")
 const userDao = require("../../data/dao/userDao")
 const testHelper = require("../testHelpter")
 
-describe("token auth test", () => {
+describe("token dao test", () => {
     it("test save token", (done) => {
         userDao.getUserByEmail("test_evn@digit3.me", (user, error) => {
             if (error) {
@@ -30,16 +30,4 @@ describe("token auth test", () => {
             })
         })
     })
-
-    // it.only("Validate token successful", (done) => {
-    //
-    // })
-    //
-    // it.skip("Validate token failed", (done) => {
-    //
-    // })
-    //
-    // it.skip("Validate token expired", (done) => {
-    //
-    // })
 })

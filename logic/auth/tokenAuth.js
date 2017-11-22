@@ -63,29 +63,25 @@ const getRandomInt = (max, min) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-exports.validateToken = (token, next, callback) => {
+exports.validateToken = (token, callback) => {
     if (token) {
-        //token format: Authorization tokendata
+        //token format: Authorization Bearer tokendata
         try {
-            const tokenData = token.split(" ")[1]
+            const tokenData = token.split(" ")[2]
             const userId = tokenData.split("%")[0]
 
             UserDao.getUserById(userId, {path: "token"}, (user, error) => {
                 if (error) {
-                    callback(false, errorEntity.invalidTokenError)
+                    throw error
+                }
+
+                if (_.filter(user.token, {tokenData})) {
+                    callback(true, null)
 
                     return
                 }
 
-                if (_.filter(user.token, {tokenData})) {
-                    if (isTokenExpired(token)) {
-                        TokenDao.removeTokenById(token.id)
-
-                        callback(true, errorEntity.expiredTokenError)
-                    } else {
-                        callback(true, null)
-                    }
-                }
+                throw new Error()
             })
         } catch (err) {
             callback(false, errorEntity.invalidTokenError)
@@ -95,11 +91,10 @@ exports.validateToken = (token, next, callback) => {
     }
 }
 
-//visible for testing
-const isTokenExpired = (token) => {
-    const tokenDate = new Date(parseInt(token.id.substring(0, 8), 16))
-    const currentDate = new Date()
-
-    return tokenDate.getSeconds() + valueConstants.TOKEN_EXPIRE_SECONDS < currentDate.getSeconds()
-}
+// const isTokenExpired = (token) => {
+//     const tokenDate = new Date(parseInt(token.id.substring(0, 8), 16))
+//     const currentDate = new Date()
+//
+//     return tokenDate.getSeconds() + valueConstants.TOKEN_EXPIRE_SECONDS < currentDate.getSeconds()
+// }
 
