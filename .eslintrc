@@ -31,6 +31,10 @@
   "rules": {
     "no-var": 2,                     // http://eslint.org/docs/rules/no-var
     "prefer-const": 0,               // http://eslint.org/docs/rules/prefer-const
+    "prefer-destructuring": ["error", {"object": true, "array": true}],
+    //https://eslint.org/docs/rules/prefer-destructuring
+
+    "func-style": ["error", "expression", { "allowArrowFunctions": true }],
 
     /**
      * Variables
@@ -43,7 +47,9 @@
       "args": "after-used"
     }],
     "no-use-before-define": [2, { "functions": false, "classes": false }],       // http://eslint.org/docs/rules/no-use-before-define
-
+    "prefer-spread": "error",
+    "prefer-arrow-callback": "error",
+    "no-confusing-arrow": "error",
     /**
      * Possible errors
      */

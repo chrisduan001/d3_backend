@@ -3,15 +3,19 @@
  */
 const UserDao = require("../../data/dao/userDao")
 const TokenDao = require("../../data/dao/tokenDao")
-const errorEntity = require("../../data/entity/errorEntity").errorEntity
 const valueConstants = require("../../constants/valueConstants")
 const bcrypt = require("bcrypt")
 const _ = require("lodash")
 
+const {
+    userAuthError,
+    serverError
+} = require("../../data/entity/errorEntity").errorEntity
+
 exports.authorizeUser = ({email, password}, callback) => {
     UserDao.getUserByEmail(email, (user, error) => {
         if (error) {
-            callback(errorEntity.userAuthError)
+            callback(userAuthError)
 
             return
         }
@@ -28,7 +32,7 @@ exports.authorizeUser = ({email, password}, callback) => {
                         refreshToken,
                         (updatedUser, err) => {
                             if (err) {
-                                callback(errorEntity.serverError)
+                                callback(serverError)
 
                                 return
                             }
@@ -41,7 +45,7 @@ exports.authorizeUser = ({email, password}, callback) => {
                             })
                         })
                 } else {
-                    callback(errorEntity.userAuthError)
+                    callback(userAuthError)
                 }
             })
     })
@@ -67,8 +71,8 @@ exports.validateToken = (token, callback) => {
     if (token) {
         //token format: Authorization Bearer tokendata
         try {
-            const tokenData = token.split(" ")[2]
-            const userId = tokenData.split("%")[0]
+            const {2: tokenData} = token.split(" ")
+            const {0: userId} = tokenData.split("%")
 
             UserDao.getUserById(userId, {path: "token"}, (user, error) => {
                 if (error) {
