@@ -12,7 +12,7 @@ const {saveUserError, userAuthError} = require("../../data/entity/errorEntity").
 
 chai.use(chaiHttp)
 
-describe.only("save user", () => {
+describe("save user", () => {
     let authToken
 
     before((done) => {
