@@ -2,7 +2,6 @@
  * Created by on 11/23/17.
  */
 const assert = require("assert")
-const tokenDao = require("../../data/dao/tokenDao")
 const userDao = require("../../data/dao/userDao")
 const testHelper = require("../testHelpter")
 

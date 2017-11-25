@@ -9,7 +9,8 @@ const _ = require("lodash")
 
 const {
     userAuthError,
-    serverError
+    serverError,
+    invalidTokenError
 } = require("../../data/entity/errorEntity").errorEntity
 
 exports.authorizeUser = ({email, password}, callback) => {
@@ -71,7 +72,7 @@ exports.validateToken = (token, callback) => {
     if (token) {
         //token format: Authorization Bearer tokendata
         try {
-            const {2: tokenData} = token.split(" ")
+            const {1: tokenData} = token.split(" ")
             const {0: userId} = tokenData.split("%")
 
             UserDao.getUserById(userId, {path: "token"}, (user, error) => {
@@ -88,10 +89,10 @@ exports.validateToken = (token, callback) => {
                 throw new Error()
             })
         } catch (err) {
-            callback(false, errorEntity.invalidTokenError)
+            callback(false, invalidTokenError)
         }
     } else {
-        callback(false, errorEntity.invalidTokenError)
+        callback(false, invalidTokenError)
     }
 }
 

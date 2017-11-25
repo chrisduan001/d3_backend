@@ -12,3 +12,9 @@ exports.postUser = (req, res) => {
         res.send(response)
     })
 }
+
+exports.getUserByEmail = (req, res) => {
+    userActions.getUserByEmail(req.query.email, (response) => {
+        res.send(response)
+    })
+}
