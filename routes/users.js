@@ -1,4 +1,4 @@
-const userActions = require("../logic/user/userActions")
+const userActions = require("../logic/user/userActions");
 
 /* GET users listing. */
 // exports.getUser = (req, res) => {
@@ -9,12 +9,12 @@ const userActions = require("../logic/user/userActions")
 
 exports.postUser = (req, res) => {
     userActions.saveNewUser(req.body, (response) => {
-        res.send(response)
-    })
-}
+        res.send(response);
+    });
+};
 
 exports.getUserByEmail = (req, res) => {
     userActions.getUserByEmail(req.query.email, (response) => {
-        res.send(response)
-    })
-}
+        res.send(response);
+    });
+};

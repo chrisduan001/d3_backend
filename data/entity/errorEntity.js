@@ -37,4 +37,4 @@ exports.errorEntity = {
             message: "Token expired"
         }
     }
-}
+};
