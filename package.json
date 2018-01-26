@@ -18,7 +18,8 @@
     "mongoose": "^4.11.13",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.2",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
