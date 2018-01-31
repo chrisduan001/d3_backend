@@ -14,6 +14,9 @@ const ICE_CANDIDATE = "ice_candidate";
 const RECEIVE_ICE_CANDIDATE = "receive_ice_candidate";
 const SEND_MESSAGE = "send_message";
 const NEW_MESSAGE = "new_message";
+const GET_ROOM_INFO = "SOCKET_GET_ROOM_INFO";
+const SEND_ROOM_INFO = "SOCKET_SEND_ROOM_INFO";
+const USER_DISCONNECTED = "SOCKET_USER_DISCONNECTED";
 
 const joinRoom = (roomNumber, userName) => {
     let users = connections[roomNumber];
@@ -45,6 +48,7 @@ exports.socketActions = (io, socket) => {
     socket.on("disconnect", () => {
         console.log(userName + " disconnected");
         removeUserFromRoom(roomNumber, userName);
+        socket.to(roomNumber).emit(USER_DISCONNECTED);
     });
 
 
@@ -60,22 +64,27 @@ exports.socketActions = (io, socket) => {
     io.to(roomNumber).emit("join room", {userName});
 
     socket.on(SEND_MESSAGE, (data) => {
-        socket.to(data.roomNumber).emit(NEW_MESSAGE, {message: data.message});
+        socket.to(roomNumber).emit(NEW_MESSAGE, {message: data.message});
     });
 
-    socket.on(INIT_CALL, (data) => {
-        socket.to(data.roomNumber).emit(CALL_RECEIVED);
+    socket.on(INIT_CALL, () => {
+        socket.to(roomNumber).emit(CALL_RECEIVED);
     });
 
-    socket.on(ACCEPT_CALL, (data) => {
-        socket.to(data.roomNumber).emit(CALL_ACCEPTED);
+    socket.on(ACCEPT_CALL, () => {
+        socket.to(roomNumber).emit(CALL_ACCEPTED);
     });
 
     socket.on(SEND_SDP, (data) => {
-        socket.to(data.roomNumber).emit(RECEIVE_SDP, {message: data.message});
+        console.log(roomNumber);
+        socket.to(roomNumber).emit(RECEIVE_SDP, {message: data.message});
     });
 
     socket.on(ICE_CANDIDATE, (data) => {
-        socket.to(data.roomNumber).emit(RECEIVE_ICE_CANDIDATE, {message: data.message});
+        socket.to(roomNumber).emit(RECEIVE_ICE_CANDIDATE, {message: data.message});
+    });
+
+    socket.on(GET_ROOM_INFO, () => {
+        io.sockets.connected[socket.client.id].emit(SEND_ROOM_INFO, {message: connections[roomNumber]});
     });
 };
