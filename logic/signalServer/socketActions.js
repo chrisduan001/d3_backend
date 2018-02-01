@@ -3,7 +3,7 @@
  */
 const _ = require("lodash");
 
-const connections = {}; //{roomNumber: [users]}
+const connections = {}; //eg: {roomNumber: [users]}
 const INIT_CALL = "init_call";
 const CALL_RECEIVED = "call_received";
 const ACCEPT_CALL = "accept_call";
@@ -17,6 +17,14 @@ const NEW_MESSAGE = "new_message";
 const GET_ROOM_INFO = "SOCKET_GET_ROOM_INFO";
 const SEND_ROOM_INFO = "SOCKET_SEND_ROOM_INFO";
 const USER_DISCONNECTED = "SOCKET_USER_DISCONNECTED";
+const REQUEST_VOICE_CALL = "REQUEST_VOICE_CALL";
+const REQUEST_VIDEO_CALL = "REQUEST_VIDEO_CALL";
+const ACCEPTED_VOICE_CALL = "ACCEPTED_VOICE_CALL";
+const ACCEPTED_VIDEO_CALL = "ACCEPTED_VIDEO_CALL";
+const DECLINE_CALL = "DECLINE_CALL";
+const CALL_DECLINED = "CALL_DECLINED";
+const VOICE_CALL_RECEIVED = "VOICE_CALL_RECEIVED";
+const VIDEO_CALL_RECEIVED = "VIDEO_CALL_RECEIVED";
 
 const joinRoom = (roomNumber, userName) => {
     let users = connections[roomNumber];
