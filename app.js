@@ -44,7 +44,10 @@ router.route("/token")
     .post(token.getToken);
 
 /**
- * @api {post} /api/chatLogin
+ * @api {post} /api/chatLogin userLogin
+ * @apiVersion 0.0.1
+ * @apiGroup chat
+ * @apiName user userLogin
  * @apiParamExample {json} Input
  * {
  *  "passcode": "example",
@@ -69,7 +72,10 @@ router.route("/chatLogin")
     .post(leafChat.loginUser);
 
 /**
- * @api {post} /api/chatLogout
+ * @api {post} /api/chatLogout userLogout
+ * @apiVersion 0.0.1
+ * @apiGroup chat
+ * @apiName user logout
  * @apiParamExample {json} Input
  * {
  *  "userName": "username"
