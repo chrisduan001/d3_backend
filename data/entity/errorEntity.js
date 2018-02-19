@@ -36,5 +36,20 @@ exports.errorEntity = {
             errorCode: 903,
             message: "Token expired"
         }
+    },
+
+    //leaf chat
+    userNameUsedError: {
+        error: {
+            errorCode: 1000,
+            message: "User name has been used"
+        }
+    },
+
+    passcodeError: {
+        error: {
+            errorCode: 1001,
+            message: "Incorrect passcode"
+        }
     }
 };

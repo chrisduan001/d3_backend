@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const index = require("./routes/index");
 const users = require("./routes/users");
 const token = require("./routes/token");
+const leafChat = require("./routes/leafChat");
 
 const app = express();
 
@@ -41,6 +42,12 @@ router.route("/verifyEmail")
 
 router.route("/token")
     .post(token.getToken);
+
+router.route("/chatLogin")
+    .post(leafChat.loginUser);
+
+router.route("/chatLogout")
+    .post(leafChat.logoutUser);
 
 app.use("/api", router);
 
