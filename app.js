@@ -43,9 +43,40 @@ router.route("/verifyEmail")
 router.route("/token")
     .post(token.getToken);
 
+/**
+ * @api {post} /api/chatLogin
+ * @apiParamExample {json} Input
+ * {
+ *  "passcode": "example",
+ *  "userName": "username"
+ * }
+ * @apiSuccessExample {json} Success
+ * {
+ *  "userName":"example"
+ * }
+ * @apiErrorExample {json} Incorrect passcode
+ * {
+ *  "errorCode": 1001,
+ *  "message": "Incorrect passcode"
+ * }
+ * @apiErrorExample {json} UserName used
+ * {
+ *  "errorCode": 1000,
+ *  "message": "User name has been used"
+ * }
+ */
 router.route("/chatLogin")
     .post(leafChat.loginUser);
 
+/**
+ * @api {post} /api/chatLogout
+ * @apiParamExample {json} Input
+ * {
+ *  "userName": "username"
+ * }
+ * @apiSuccessExample {json} Success
+ * {}
+ */
 router.route("/chatLogout")
     .post(leafChat.logoutUser);
 
