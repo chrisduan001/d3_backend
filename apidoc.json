@@ -1,0 +1,8 @@
+{
+  "name": "D3 backend documentation",
+  "version": "0.0.1",
+  "description": "API docs",
+  "template": {
+    "forceLanguage": "en"
+  }
+}
