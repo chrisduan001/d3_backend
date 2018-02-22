@@ -72,6 +72,19 @@ router.route("/chatLogin")
     .post(leafChat.loginUser);
 
 /**
+ * @api {get} /api/chatGetCurrentUsers getAllUsers
+ * @apiVersion 0.0.1
+ * @apiGroup chat
+ * @apiName current logged in users
+ * @apiSuccessExample {json} Success
+ * {
+ *  "users":"user01,user02"
+ * }
+ */
+router.route("/chatGetCurrentUsers")
+    .get(leafChat.getCurrentUsers);
+
+/**
  * @api {post} /api/chatLogout userLogout
  * @apiVersion 0.0.1
  * @apiGroup chat

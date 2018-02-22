@@ -37,18 +37,32 @@ describe("Leaf chat login", () => {
     });
 
     it("/POST leaf chat login duplicate user name", (done) => {
-        const body = {passcode: "l23fct!@#Cap", userName: "hello1"};
+        loginUser("hello1", () => {
+            loginUser("hello1", (err, res) => {
+                assert(_.isEqual(res.body, userNameUsedError));
+                done();
+            });
+        });
+    });
+
+    it("/GET leaf chat get all users", (done) => {
+        loginUser("hello1", () => {
+            chai.request(server)
+                .get("/api/chatGetCurrentUsers")
+                .end((err, res) => {
+                    assert(res.body.users === "hello1");
+                    done();
+                });
+        });
+    });
+
+    const loginUser = (userName, done) => {
+        const body = {passcode: "l23fct!@#Cap", userName};
         chai.request(server)
             .post("/api/chatLogin")
             .send(body)
-            .end(() => {
-                chai.request(server)
-                    .post("/api/chatLogin")
-                    .send(body)
-                    .end((err, res) => {
-                        assert(_.isEqual(res.body, userNameUsedError));
-                        done();
-                    });
+            .end((err, res) => {
+                done(err, res);
             });
-    });
+    };
 });

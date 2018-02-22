@@ -30,3 +30,7 @@ exports.leaveLeafChat = ({userName}, callback) => {
 
     callback();
 };
+
+exports.getCurrentUsers = (callback) => {
+    callback({users: _.join(currentUsers, ",")});
+};

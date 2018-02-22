@@ -14,3 +14,9 @@ exports.logoutUser = (req, res) => {
         res.send();
     });
 };
+
+exports.getCurrentUsers = (req, res) => {
+    chatActions.getCurrentUsers((response) => {
+        res.send(response);
+    });
+};
