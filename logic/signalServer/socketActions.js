@@ -9,6 +9,7 @@ const CALL_RECEIVED = "call_received";
 const ACCEPT_CALL = "accept_call";
 const CALL_ACCEPTED = "call_accepted";
 const SEND_SDP = "send_sdp";
+const SEND_ANDROID_SDP = "send_android_sdp";
 const RECEIVE_SDP = "receive_sdp";
 const ICE_CANDIDATE = "ice_candidate";
 const RECEIVE_ICE_CANDIDATE = "receive_ice_candidate";
@@ -39,7 +40,8 @@ const removeUserFromRoom = (roomNumber, userName) => {
 
 exports.socketActions = (io, socket) => {
     const {roomNumber, userName} = socket.request._query;
-
+    console.log(roomNumber);
+    console.log(userName);
     if (!roomNumber || !userName) {
         socket.disconnect();
         return;
@@ -78,6 +80,11 @@ exports.socketActions = (io, socket) => {
     socket.on(SEND_SDP, (data) => {
         console.log(roomNumber);
         socket.to(roomNumber).emit(RECEIVE_SDP, {message: data.message});
+    });
+
+    socket.on(SEND_ANDROID_SDP, (type, description) => {
+        console.log(type);
+        console.log(description);
     });
 
     socket.on(ICE_CANDIDATE, (data) => {
